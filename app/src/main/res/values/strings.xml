@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">EpisodeTracker</string>
+    <string name="episodes">Episodes</string>
+    <string name="episode">Episode Name</string>
+    <string name="save">Save</string>
+    <string name="add_episode">Add Episode</string>
+    <string name="download_count">Download Count</string>
+    <string name="watch_count">Watch Count</string>
+    <string name="delete">Delete</string>
+    <string name="edit_show">Edit Show</string>
+    <string name="exportEpisodes">Export Episodes</string>
+    <string name="importEpisodes">Import Episodes</string>
+    <string name="directoryDoesNotExists">Directory does not exist</string>
+    <string name="permissionTitle">Permissons</string>
+    <string name="storagePermissionMsg">In order to store episodes to disk, we need the following permission</string>
+    <string name="export_error">Problems Exporting</string>
+    <string name="import_error">Problems Importing</string>
+    <string name="deleteEpisodes">Delete All Episodes</string>
+    <string name="sorted">Sorted</string>
+</resources>

@@ -1,0 +1,9 @@
+include ':app'
+include ':androidUtil'
+project(':androidUtil').projectDir = new File('../androidUtil')
+include ':kotlinUtils'
+project(':kotlinUtils').projectDir = new File('../kotlinUtils')
+include  ':mvpframework'
+project(':mvpframework').projectDir = new File('../MVPFramework')
+include  ':sqlLibrary'
+project(':sqlLibrary').projectDir = new File('../EasySQLLibrary/easysqllibrary')

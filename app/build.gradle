@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    defaultConfig {
+        applicationId "com.mastertechsoftware.episodetracker"
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+//kapt {
+//    generateStubs = true
+//}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+
+
+    // Dagger
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    provided 'javax.annotation:jsr250-api:1.0'
+    compile project(':androidUtil')
+    compile project(':kotlinUtils')
+    compile project(':mvpframework')
+    compile project(':sqlLibrary')
+//    compile libAppAnnotations
+    compile libGson
+    compile 'com.shawnlin:number-picker:2.4.2'
+    compile libEventBus
+    compile libSupport
+    compile libRecyclerView
+    compile libAppCompat
+    compile libDesign
+    compile libKotlin
+    compile libLogging
+    compile libConstraint
+//    compile libEasysqllibrary
+}

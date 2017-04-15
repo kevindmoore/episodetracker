@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EpisodeTracker.iml" filepath="$PROJECT_DIR$/EpisodeTracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../androidUtil/androidUtil.iml" filepath="$PROJECT_DIR$/../androidUtil/androidUtil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../kotlinUtils/kotlinUtils.iml" filepath="$PROJECT_DIR$/../kotlinUtils/kotlinUtils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MVPFramework/mvpframework.iml" filepath="$PROJECT_DIR$/../MVPFramework/mvpframework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../EasySQLLibrary/easysqllibrary/sqlLibrary.iml" filepath="$PROJECT_DIR$/../EasySQLLibrary/easysqllibrary/sqlLibrary.iml" />
+    </modules>
+  </component>
+</project>
