@@ -58,5 +58,6 @@ dependencies {
     compile libKotlin
     compile libLogging
     compile libConstraint
+    compile libStetho
 //    compile libEasysqllibrary
 }

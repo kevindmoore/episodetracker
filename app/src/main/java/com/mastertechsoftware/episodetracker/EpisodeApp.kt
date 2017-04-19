@@ -1,6 +1,7 @@
 package com.mastertechsoftware.episodetracker
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.mastertechsoftware.activity.DefaultCurrentActivityListener
 import com.mastertechsoftware.episodetracker.dagger.AppComponent
 import com.mastertechsoftware.episodetracker.dagger.AppModule
@@ -12,7 +13,7 @@ import com.mastertechsoftware.util.ExceptionHandler
 import com.mastertechsoftware.util.NotificationHandler
 
 /**
- *
+ * Application class
  */
 class EpisodeApp  : Application() {
     private val SD_FILE_SIZE = 20000
@@ -24,13 +25,14 @@ class EpisodeApp  : Application() {
                 .build()
 
         graph.injectApplication(this)
-        val databaseManager = graph.databaseManager()
+        graph.databaseManager() // Do this so that it get's it's instance set
         val defaultCurrentActivityListener = DefaultCurrentActivityListener()
         registerActivityLifecycleCallbacks(defaultCurrentActivityListener)
         val exceptionHandler = ExceptionHandler(defaultCurrentActivityListener, Thread.getDefaultUncaughtExceptionHandler())
         Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
         NotificationHandler.setNotificationIcon(R.mipmap.ic_launcher)
         NotificationHandler.setAppName(getString(R.string.app_name))
+        Stetho.initializeWithDefaults(this)
     }
 
     fun setLogInfo() {

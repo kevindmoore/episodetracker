@@ -19,6 +19,11 @@ import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.mastertechsoftware.activity.ActivityUtils
 import com.mastertechsoftware.dialog.ProgressDialogHelper
+import com.mastertechsoftware.easysqllibrary.sql.BaseDatabaseHelper
+import com.mastertechsoftware.easysqllibrary.sql.Column
+import com.mastertechsoftware.easysqllibrary.sql.upgrade.UpgradeHolder
+import com.mastertechsoftware.easysqllibrary.sql.upgrade.UpgradeStrategy
+import com.mastertechsoftware.easysqllibrary.sql.upgrade.UpgradeTable
 import com.mastertechsoftware.episodetracker.EpisodeApp
 import com.mastertechsoftware.episodetracker.MainActivity
 import com.mastertechsoftware.episodetracker.R
@@ -49,16 +54,18 @@ class ShowView : MVPView() {
     @Inject lateinit var presenter: Presenter
     @Inject lateinit var eventManager: EventManager
     @Inject lateinit var dataManager: DataManager
-    lateinit var prefs : Prefs
+    var prefs : Prefs
     var showList: RecyclerView? = null
     var showAdapter: ShowAdapter
+    val dbVersion = 2
 
     init {
         MainActivity.graph.injectScreenView(this)
         prefs = EpisodeApp.graph.prefs()
-        dataManager.addDatabase(DBNAME, TABLENAME, Show::class.java)
+        dataManager.addDatabase(DBNAME, TABLENAME, dbVersion, Show::class.java)
+        dataManager.setUpgradeStrategy(EpisodeUpdater())
         var shows = dataManager.getAllItems(DBNAME, Show::class.java) as MutableList<Show>
-        if (prefs.getBoolean(SORTED)) {
+        if (shows.isNotEmpty() && prefs.getBoolean(SORTED)) {
             shows = sortEpisodes(shows)
         }
         showAdapter = ShowAdapter(shows, eventManager)
@@ -112,7 +119,7 @@ class ShowView : MVPView() {
     }
 
     private fun deleteEpisodes() {
-        dataManager.deleteDatabase(DBNAME)
+        dataManager.deleteAllItems(DBNAME, Show::class.java)
         showAdapter.updateShows(ArrayList<Show>())
     }
 
@@ -259,7 +266,7 @@ class ShowView : MVPView() {
     companion object {
         val SORTED = "SORTED"
         val DBNAME = "Episodes"
-        val TABLENAME = "Episodes"
+        val TABLENAME = "show"
         val EPISODE_CLICK = "EPISODE_CLICK"
         val FILE_BROWSER_RESULT = 100
         val EPISODE_PATH = Environment.getExternalStorageDirectory().absolutePath + "/episodes/"
@@ -272,5 +279,36 @@ class ShowView : MVPView() {
             shows = sortEpisodes(shows)
         }
         showAdapter.updateShows(shows)
+    }
+
+    class EpisodeUpdater : UpgradeStrategy {
+        private var allEpisodes: List<UpgradeHolder>? = null
+        override fun setVersions(oldVersion: Int, newVersion: Int) {
+        }
+
+        override fun loadData(helper: BaseDatabaseHelper?) {
+            var upgradeTable = UpgradeTable()
+            upgradeTable.tableName = TABLENAME
+            upgradeTable.addField("episodeName", Column.COLUMN_TYPE.TEXT)
+            upgradeTable.addField("downloadCount", Column.COLUMN_TYPE.INTEGER)
+            upgradeTable.addField("watchedCount", Column.COLUMN_TYPE.INTEGER)
+            allEpisodes = helper?.getAllEntries(upgradeTable, UpgradeHolder::class.java,
+                    upgradeTable.mapper) as List<UpgradeHolder>?
+        }
+
+        override fun onDelete(helper: BaseDatabaseHelper?) {
+        }
+
+        override fun addData(helper: BaseDatabaseHelper?) {
+            var upgradeTable = UpgradeTable()
+            upgradeTable.tableName = TABLENAME
+            upgradeTable.addField("episodeName", Column.COLUMN_TYPE.TEXT)
+            upgradeTable.addField("downloadCount", Column.COLUMN_TYPE.INTEGER)
+            upgradeTable.addField("watchedCount", Column.COLUMN_TYPE.INTEGER)
+            upgradeTable.addField("finished", Column.COLUMN_TYPE.BOOLEAN)
+            upgradeTable.allEntries = allEpisodes
+            upgradeTable.insertEntries(helper?.getLocalDatabase())
+        }
+
     }
 }
