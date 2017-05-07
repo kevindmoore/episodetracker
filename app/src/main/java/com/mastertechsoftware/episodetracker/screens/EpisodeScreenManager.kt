@@ -16,6 +16,7 @@ class EpisodeScreenManager : ScreenManagerImpl() {
     private var editEpisodeScreenLogic : EditEpisodeScreenLogic? = null
     @Inject lateinit var eventManager : EventManager
     @Inject lateinit var dataManager : DataManager
+    @Inject lateinit var presenter: Presenter
 
     override fun currentLogic(): ScreenLogic? {
         if (stackSize() == 0) {
@@ -45,21 +46,26 @@ class EpisodeScreenManager : ScreenManagerImpl() {
                 }
                 editEpisodeScreenLogic?.show = show
                 push(editEpisodeScreenLogic!!)
+                presenter.toolbarManager.setBackButton(true)
+                presenter.toolbarManager.showToolbar(true)
             }
             SAVE_EPISODE ->  {
                 val show = event.data as Show
                 dataManager.updateItem(ShowView.DBNAME, Show::class.java, show)
                 episodeScreenLogic.refresh()
                 pop()
+                presenter.toolbarManager.setBackButton(false)
             }
             CANCEL_EPISODE ->  {
                 pop()
+                presenter.toolbarManager.setBackButton(false)
             }
             DELETE_EPISODE -> kotlin.run {
                 val show = event.data as Show
                 dataManager.deleteItem(ShowView.DBNAME, Show::class.java, show.id)
                 episodeScreenLogic.refresh()
                 pop()
+                presenter.toolbarManager.setBackButton(false)
             }
         }
     }

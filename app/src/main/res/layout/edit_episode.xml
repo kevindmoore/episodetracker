@@ -2,43 +2,75 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             android:layout_width="fill_parent"
-                                             android:layout_height="wrap_content"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:orientation="vertical"
                                              android:padding="5dp"
-        >
+                                             android:id="@+id/parent_layout"
+
+>
     <TextView
             android:text="@string/episode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_label"
             android:id="@+id/episode_name_label"
-
-            />
+            app:layout_constraintLeft_toLeftOf="@+id/episode"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="5dp"/>
     <EditText
             android:layout_height="wrap_content"
             style="@style/edit_text"
             android:inputType="text|textCapSentences"
             tools:text="Episode Name"
             android:ems="10"
-            android:id="@+id/episode" android:layout_marginEnd="16dp"
+            android:id="@+id/episode"
+            android:layout_marginEnd="16dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/episode_name_label"
             android:layout_marginRight="16dp"
             android:layout_width="0dp"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="10dp" android:layout_marginLeft="10dp"/>
+    <TextView
+            android:text="@string/season"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/text_label"
+            android:id="@+id/season_label"
+            app:layout_constraintTop_toBottomOf="@+id/episode"
+            app:layout_constraintLeft_toLeftOf="@+id/episode"
+            android:layout_marginBottom="5dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/edit_text"
+            android:inputType="number"
+            app:layout_constraintLeft_toRightOf="@+id/season_label"
+            app:layout_constraintTop_toBottomOf="@+id/episode"
+            android:ems="10"
+            android:id="@+id/season"
+            android:layout_marginBottom="5dp"/>
+    <ToggleButton
+            android:textOn="@string/finished"
+            android:textOff="@string/playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/finished"
+            app:layout_constraintTop_toBottomOf="@+id/season_label"
+            app:layout_constraintLeft_toLeftOf="@+id/episode"
+    />
     <TextView
             android:text="@string/download_count"
             style="@style/text_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/episode"
+            app:layout_constraintTop_toBottomOf="@+id/finished"
             android:id="@+id/download_count_label"
             app:layout_constraintRight_toLeftOf="@+id/watched_count_label"
             app:layout_constraintLeft_toLeftOf="parent"/>
+
     <com.shawnlin.numberpicker.NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@+id/download_count_label"
-            app:layout_constraintTop_toBottomOf="@+id/episode"
+            app:layout_constraintTop_toBottomOf="@+id/finished"
             android:id="@+id/watched_count_label"
             app:layout_constraintRight_toRightOf="parent"/>
     <com.shawnlin.numberpicker.NumberPicker
@@ -74,24 +106,39 @@
             android:text="@string/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/download_count"
             android:id="@+id/save"
             app:layout_constraintRight_toLeftOf="@+id/delete"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"/>
     <Button
             android:text="@string/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@+id/save"
-            app:layout_constraintTop_toBottomOf="@+id/download_count"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
             android:id="@+id/delete"
-            app:layout_constraintRight_toLeftOf="@+id/cancel"/>
+            app:layout_constraintRight_toLeftOf="@+id/cancel"
+            app:layout_constraintHorizontal_bias="0.5"/>
     <Button
             android:text="@string/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@+id/delete"
-            app:layout_constraintTop_toBottomOf="@+id/download_count"
             android:id="@+id/cancel"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintRight_toRightOf="parent"/>
+
+    <android.support.constraint.Guideline
+            android:id="@+id/bottom_guide"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="1.0"
+    />
 </android.support.constraint.ConstraintLayout>
+
+
+

@@ -57,7 +57,7 @@ class ShowView : MVPView() {
     var prefs : Prefs
     var showList: RecyclerView? = null
     var showAdapter: ShowAdapter
-    val dbVersion = 2
+    val dbVersion = 3
 
     init {
         MainActivity.graph.injectScreenView(this)
@@ -66,7 +66,7 @@ class ShowView : MVPView() {
         dataManager.setUpgradeStrategy(EpisodeUpdater())
         var shows = dataManager.getAllItems(DBNAME, Show::class.java) as MutableList<Show>
         if (shows.isNotEmpty() && prefs.getBoolean(SORTED)) {
-            shows = sortEpisodes(shows)
+            sortEpisodes(shows)
         }
         showAdapter = ShowAdapter(shows, eventManager)
         presenter.toolbarManager.setTitle(R.string.episodes)
@@ -99,8 +99,8 @@ class ShowView : MVPView() {
                 prefs.putBoolean(SORTED, menuItem.isChecked)
                 when (menuItem.isChecked) {
                     true -> {
-                        var shows = sortEpisodes(showAdapter.shows)
-                        showAdapter.updateShows(shows)
+                        sortEpisodes(showAdapter.shows)
+                        showAdapter.updateShows(showAdapter.shows)
                     }
                     false -> {
                         var shows = dataManager.getAllItems(DBNAME, Show::class.java) as MutableList<Show>
@@ -114,8 +114,8 @@ class ShowView : MVPView() {
         return false
     }
 
-    private fun sortEpisodes(shows : MutableList<Show>) : MutableList<Show> {
-        return shows.sortedWith(compareBy{ it.episodeName }) as MutableList<Show>
+    private fun sortEpisodes(shows : MutableList<Show>)  {
+        shows.sortWith(compareBy{ it.episodeName })
     }
 
     private fun deleteEpisodes() {
@@ -276,22 +276,23 @@ class ShowView : MVPView() {
     fun refresh() {
         var shows = dataManager.getAllItems(DBNAME, Show::class.java) as MutableList<Show>
         if (prefs.getBoolean(SORTED)) {
-            shows = sortEpisodes(shows)
+            sortEpisodes(shows)
         }
         showAdapter.updateShows(shows)
     }
 
     class EpisodeUpdater : UpgradeStrategy {
+        var upgradeTable = UpgradeTable()
         private var allEpisodes: List<UpgradeHolder>? = null
         override fun setVersions(oldVersion: Int, newVersion: Int) {
         }
 
         override fun loadData(helper: BaseDatabaseHelper?) {
-            var upgradeTable = UpgradeTable()
             upgradeTable.tableName = TABLENAME
             upgradeTable.addField("episodeName", Column.COLUMN_TYPE.TEXT)
             upgradeTable.addField("downloadCount", Column.COLUMN_TYPE.INTEGER)
             upgradeTable.addField("watchedCount", Column.COLUMN_TYPE.INTEGER)
+            upgradeTable.addField("finished", Column.COLUMN_TYPE.BOOLEAN)
             allEpisodes = helper?.getAllEntries(upgradeTable, UpgradeHolder::class.java,
                     upgradeTable.mapper) as List<UpgradeHolder>?
         }
@@ -300,12 +301,7 @@ class ShowView : MVPView() {
         }
 
         override fun addData(helper: BaseDatabaseHelper?) {
-            var upgradeTable = UpgradeTable()
-            upgradeTable.tableName = TABLENAME
-            upgradeTable.addField("episodeName", Column.COLUMN_TYPE.TEXT)
-            upgradeTable.addField("downloadCount", Column.COLUMN_TYPE.INTEGER)
-            upgradeTable.addField("watchedCount", Column.COLUMN_TYPE.INTEGER)
-            upgradeTable.addField("finished", Column.COLUMN_TYPE.BOOLEAN)
+            upgradeTable.addField("season", Column.COLUMN_TYPE.INTEGER)
             upgradeTable.allEntries = allEpisodes
             upgradeTable.insertEntries(helper?.getLocalDatabase())
         }

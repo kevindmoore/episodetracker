@@ -7,6 +7,7 @@ import com.mastertechsoftware.easysqllibrary.sql.DefaultReflectTable
  */
 class Show() : DefaultReflectTable() {
     var episodeName : String? =  null
+    var season : Int =  1
     var downloadCount : Int =  0
     var watchedCount: Int =  0
     var finished: Boolean = false

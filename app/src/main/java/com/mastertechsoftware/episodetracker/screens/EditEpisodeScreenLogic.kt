@@ -26,8 +26,6 @@ class EditEpisodeScreenLogic : AbstractScreenLogic() {
         showView = presenter.showView(viewModel, show) as EditShowView
     }
 
-
-
     override fun stop() {
     }
 

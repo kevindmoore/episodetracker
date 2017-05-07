@@ -17,4 +17,7 @@
     <string name="import_error">Problems Importing</string>
     <string name="deleteEpisodes">Delete All Episodes</string>
     <string name="sorted">Sorted</string>
+    <string name="season">Season</string>
+    <string name="finished">Finished</string>
+    <string name="playing">Playing</string>
 </resources>
